@@ -118,54 +118,54 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="TrayMenu_Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Настройки</value>
   </data>
   <data name="TrayMenu_Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Выход</value>
   </data>
   <data name="Config_Files" xml:space="preserve">
-    <value>History file: </value>
+    <value>Файл истории: </value>
   </data>
   <data name="Config_LoadedHistorySize" xml:space="preserve">
-    <value>History size loaded from settings: </value>
+    <value>Размер истории загружен из настроек: </value>
   </data>
   <data name="Config_LoadedTrayElements" xml:space="preserve">
-    <value>Tray size loaded from settings: </value>
+    <value>Количество элементов в трее загружено из настроек: </value>
   </data>
   <data name="Config_AutoLoad" xml:space="preserve">
-    <value>Added to autoload. (Checked = true in settings)</value>
+    <value>Приложение записано в автозагрузку. (В настройках ставим Checked = true)</value>
   </data>
   <data name="Info_AutoloadOff" xml:space="preserve">
-    <value>Program {0} removed from autoload in registry</value>
+    <value>Программа {0} удалена из автозагрузки в реестре</value>
   </data>
   <data name="Info_AutoloadCheckedError" xml:space="preserve">
-    <value>Error remoing autoload for {0} from registry</value>
+    <value>Ошибка удаления {0} из автозагрузки в реестре</value>
   </data>
   <data name="AutoloadRegistryAccess" xml:space="preserve">
-    <value>Error access to {0}</value>
+    <value>Ошибка доступа к реестру {0}</value>
   </data>
   <data name="Info_HistorySizeChanged" xml:space="preserve">
-    <value>History size changed: {0}</value>
+    <value>Размер истории изменен: {0}</value>
   </data>
   <data name="Info_TraySizeChanged" xml:space="preserve">
-    <value>Tray size changed: {0}</value>
+    <value>Количество элементов в трее изменено: {0}</value>
   </data>
   <data name="Info_HistoryAdded" xml:space="preserve">
-    <value>Added to history: {0}</value>
+    <value>В историю добавлен новый элемент: {0}</value>
   </data>
   <data name="Info_AutoloadOn" xml:space="preserve">
-    <value>{0} added to autoload in registry</value>
+    <value>Программа {0} записана в автозагрузку через реестр</value>
   </data>
   <data name="Culture_Invariant" xml:space="preserve">
-    <value>(default)</value>
+    <value>(системный)</value>
   </data>
   <data name="Culture_Russian" xml:space="preserve">
-    <value>Russian</value>
+    <value>Русский</value>
   </data>
     <data name="CultureChanged_Text" xml:space="preserve">
-    <value>Please restart the application</value>
+    <value>Пожалуйста перезапустите приложение</value>
   </data>
     <data name="CultureChanged_Caption" xml:space="preserve">
-    <value>Language changed</value>
+    <value>Установки изменены</value>
   </data>
 </root>

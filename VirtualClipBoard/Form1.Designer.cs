@@ -39,37 +39,41 @@
             this.size_tray = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this._notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cbLanguage = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.history_size)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.size_tray)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // list_clipboard
             // 
-            this.list_clipboard.FormattingEnabled = true;
             resources.ApplyResources(this.list_clipboard, "list_clipboard");
+            this.list_clipboard.FormattingEnabled = true;
             this.list_clipboard.Name = "list_clipboard";
-            this.list_clipboard.SelectedIndexChanged += new System.EventHandler(this.list_clipboard_SelectedIndexChanged);
+            this.list_clipboard.SelectedIndexChanged += new System.EventHandler(this.ListClipboardSelectedIndexChanged);
             // 
             // exit
             // 
             resources.ApplyResources(this.exit, "exit");
             this.exit.Name = "exit";
             this.exit.UseVisualStyleBackColor = true;
-            this.exit.Click += new System.EventHandler(this.exit_Click);
+            this.exit.Click += new System.EventHandler(this.ExitClick);
             // 
             // clear
             // 
             resources.ApplyResources(this.clear, "clear");
             this.clear.Name = "clear";
             this.clear.UseVisualStyleBackColor = true;
-            this.clear.Click += new System.EventHandler(this.clear_Click);
+            this.clear.Click += new System.EventHandler(this.ClearClick);
             // 
             // autoload
             // 
             resources.ApplyResources(this.autoload, "autoload");
             this.autoload.Name = "autoload";
             this.autoload.UseVisualStyleBackColor = true;
-            this.autoload.CheckedChanged += new System.EventHandler(this.autoload_CheckedChanged);
+            this.autoload.CheckedChanged += new System.EventHandler(this.AutoloadCheckedChanged);
             // 
             // history_size
             // 
@@ -90,7 +94,7 @@
             0,
             0,
             0});
-            this.history_size.ValueChanged += new System.EventHandler(this.history_size_ValueChanged);
+            this.history_size.ValueChanged += new System.EventHandler(this.HistorySizeValueChanged);
             // 
             // label1
             // 
@@ -116,7 +120,7 @@
             0,
             0,
             0});
-            this.size_tray.ValueChanged += new System.EventHandler(this.size_tray_ValueChanged);
+            this.size_tray.ValueChanged += new System.EventHandler(this.SizeTrayValueChanged);
             // 
             // label2
             // 
@@ -127,23 +131,45 @@
             // 
             resources.ApplyResources(this._notifyIcon, "_notifyIcon");
             // 
+            // groupBox1
+            // 
+            resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Controls.Add(this.cbLanguage);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.size_tray);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.autoload);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.history_size);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.TabStop = false;
+            // 
+            // cbLanguage
+            // 
+            resources.ApplyResources(this.cbLanguage, "cbLanguage");
+            this.cbLanguage.FormattingEnabled = true;
+            this.cbLanguage.Name = "cbLanguage";
+            this.cbLanguage.SelectedIndexChanged += new System.EventHandler(this.cbLanguage_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            resources.ApplyResources(this.label3, "label3");
+            this.label3.Name = "label3";
+            // 
             // VirtualClipBoard
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.size_tray);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.history_size);
-            this.Controls.Add(this.autoload);
             this.Controls.Add(this.clear);
             this.Controls.Add(this.exit);
             this.Controls.Add(this.list_clipboard);
+            this.Controls.Add(this.groupBox1);
             this.Name = "VirtualClipBoard";
             ((System.ComponentModel.ISupportInitialize)(this.history_size)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.size_tray)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -158,6 +184,9 @@
         private System.Windows.Forms.NumericUpDown size_tray;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NotifyIcon _notifyIcon;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cbLanguage;
     }
 }
 

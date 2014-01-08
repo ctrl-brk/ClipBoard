@@ -117,12 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="list_clipboard.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="list_clipboard.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 12</value>
   </data>
   <data name="list_clipboard.Size" type="System.Drawing.Size, System.Drawing">
-    <value>560, 264</value>
+    <value>667, 199</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="list_clipboard.TabIndex" type="System.Int32, mscorlib">
@@ -138,10 +142,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;list_clipboard.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>2</value>
+  </data>
+  <data name="exit.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
   </data>
   <data name="exit.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 346</value>
+    <value>571, 282</value>
   </data>
   <data name="exit.Size" type="System.Drawing.Size, System.Drawing">
     <value>108, 28</value>
@@ -150,7 +157,7 @@
     <value>1</value>
   </data>
   <data name="exit.Text" xml:space="preserve">
-    <value>Выход</value>
+    <value>Exit</value>
   </data>
   <data name="&gt;&gt;exit.Name" xml:space="preserve">
     <value>exit</value>
@@ -162,10 +169,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;exit.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>1</value>
+  </data>
+  <data name="clear.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
   </data>
   <data name="clear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>440, 346</value>
+    <value>433, 282</value>
   </data>
   <data name="clear.Size" type="System.Drawing.Size, System.Drawing">
     <value>132, 28</value>
@@ -174,7 +184,7 @@
     <value>2</value>
   </data>
   <data name="clear.Text" xml:space="preserve">
-    <value>Очистить историю</value>
+    <value>Clear history</value>
   </data>
   <data name="&gt;&gt;clear.Name" xml:space="preserve">
     <value>clear</value>
@@ -186,22 +196,25 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;clear.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>0</value>
+  </data>
+  <data name="autoload.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
   </data>
   <data name="autoload.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="autoload.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 299</value>
+    <value>6, 19</value>
   </data>
   <data name="autoload.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 17</value>
+    <value>117, 17</value>
   </data>
   <data name="autoload.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
   <data name="autoload.Text" xml:space="preserve">
-    <value>Автозагрузка с Windows</value>
+    <value>Start with Windows</value>
   </data>
   <data name="&gt;&gt;autoload.Name" xml:space="preserve">
     <value>autoload</value>
@@ -210,16 +223,19 @@
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;autoload.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;autoload.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
+  <data name="history_size.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
   <data name="history_size.Location" type="System.Drawing.Point, System.Drawing">
-    <value>250, 306</value>
+    <value>218, 18</value>
   </data>
   <data name="history_size.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 20</value>
+    <value>41, 20</value>
   </data>
   <data name="history_size.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -231,25 +247,28 @@
     <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;history_size.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;history_size.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>6</value>
+  </data>
+  <data name="label1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>247, 290</value>
+    <value>152, 20</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>90, 13</value>
+    <value>60, 13</value>
   </data>
   <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
   <data name="label1.Text" xml:space="preserve">
-    <value>Размер истории</value>
+    <value>History size</value>
   </data>
   <data name="&gt;&gt;label1.Name" xml:space="preserve">
     <value>label1</value>
@@ -258,16 +277,19 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label1.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>5</value>
+  </data>
+  <data name="size_tray.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
   </data>
   <data name="size_tray.Location" type="System.Drawing.Point, System.Drawing">
-    <value>457, 306</value>
+    <value>390, 18</value>
   </data>
   <data name="size_tray.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 20</value>
+    <value>42, 20</value>
   </data>
   <data name="size_tray.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -279,25 +301,28 @@
     <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;size_tray.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;size_tray.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
+  </data>
+  <data name="label2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
   </data>
   <data name="label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>454, 290</value>
+    <value>302, 20</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 13</value>
+    <value>82, 13</value>
   </data>
   <data name="label2.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
   <data name="label2.Text" xml:space="preserve">
-    <value>Кол-во в трее</value>
+    <value>Tray history size</value>
   </data>
   <data name="&gt;&gt;label2.Name" xml:space="preserve">
     <value>label2</value>
@@ -306,10 +331,10 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label2.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>3</value>
   </data>
   <metadata name="_notifyIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
@@ -1449,14 +1474,95 @@
   <data name="_notifyIcon.Visible" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="groupBox1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="cbLanguage.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="cbLanguage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>536, 18</value>
+  </data>
+  <data name="cbLanguage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>121, 21</value>
+  </data>
+  <data name="cbLanguage.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;cbLanguage.Name" xml:space="preserve">
+    <value>cbLanguage</value>
+  </data>
+  <data name="&gt;&gt;cbLanguage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbLanguage.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;cbLanguage.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="label3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="label3.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>475, 20</value>
+  </data>
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 13</value>
+  </data>
+  <data name="label3.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="label3.Text" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="&gt;&gt;label3.Name" xml:space="preserve">
+    <value>label3</value>
+  </data>
+  <data name="&gt;&gt;label3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 222</value>
+  </data>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>667, 54</value>
+  </data>
+  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </metadata>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>ru-RU</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>584, 377</value>
+    <value>690, 319</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -2589,12 +2695,6 @@
         AAH///////////+AAAAAAAAH////////////+AAAAgAAD//////////////gAA/wAH//////////////
         /wD//pf///////////////////////////8=
 </value>
-  </data>
-  <data name="$this.MaximumSize" type="System.Drawing.Size, System.Drawing">
-    <value>600, 415</value>
-  </data>
-  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>600, 415</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>VirtualClipBoard</value>

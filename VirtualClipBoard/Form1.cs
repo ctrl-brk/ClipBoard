@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
-using System.Data.Sql;
 using System.IO;
-using System.Text.RegularExpressions;
-using System.Xml;
 using System.Xml.Linq;
-using System.Windows;
+using VirtualClipBoard.Properties;
 
 namespace VirtualClipBoard
 {
     public partial class VirtualClipBoard : Form
     {
-        String VirtualClipBoard_Name = "VirtualClipBoard"; // название программы
-        public String VirtualClipBoard_TARGET; // последний значение текстового БО
-        public String VirtualClipBoard_DAT; // путь к файлу истории
-        Dictionary<int, string> VirtualClipBoard_History = new Dictionary<int, string>(); // История нашего буфера
-        Dictionary<int, int> VirtualClipBoard_Index_ListBox; // список индексов в связки с ключами истории буфера
+        private const String VirtualClipBoardName = "VirtualClipBoard"; // название программы
+        public String VirtualClipBoardTarget; // последний значение текстового БО
+        public String VirtualClipBoardDat; // путь к файлу истории
+        Dictionary<int, string> _virtualClipBoardHistory = new Dictionary<int, string>(); // История нашего буфера
+        Dictionary<int, int> _virtualClipBoardIndexListBox; // список индексов в связки с ключами истории буфера
 
         // Подключение библиотек WIN
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
@@ -37,93 +32,97 @@ namespace VirtualClipBoard
         public VirtualClipBoard()
         {
             InitializeComponent();
-            load_configs();
+            LoadConfigs();
 
-            nextClipboardViewer = (IntPtr)SetClipboardViewer((IntPtr)this.Handle);
+            _nextClipboardViewer = SetClipboardViewer(Handle);
 
-            reload_tray(); // Обноавляемменю в трее
-            reload_list_clipboard(); // Обновляем ListBox
+            ReloadTray(); // Обноавляемменю в трее
+            ReloadListClipboard(); // Обновляем ListBox
 
-            _notifyIcon.Text = VirtualClipBoard_Name;
-            _notifyIcon.MouseDoubleClick += new MouseEventHandler(_notifyIcon_MouseDoubleClick);
+            _notifyIcon.Text = VirtualClipBoardName;
+            _notifyIcon.MouseDoubleClick += NotifyIconMouseDoubleClick;
         }
 
         // Перезагрузка элементов в ListBox
-        private void reload_list_clipboard()
+        private void ReloadListClipboard()
         {
-            VirtualClipBoard_Index_ListBox = new Dictionary<int, int>();
-            int list_target_item = 0; // индекс текущего элемента в ListBox
+            _virtualClipBoardIndexListBox = new Dictionary<int, int>();
+            var listTargetItem = 0; // индекс текущего элемента в ListBox
+            var freeSlotToTray = Settings.Default.history_size;
+
             list_clipboard.Items.Clear(); // Очищаем список
-            String string_name_ite;
-            int free_slot_to_tray = Properties.Settings.Default.history_size;
-            var list = VirtualClipBoard_History.OrderByDescending(x => x.Key);
+            var list = _virtualClipBoardHistory.OrderByDescending(x => x.Key);
+            
             foreach (var item in list)
             {
-                if (item.Value.Length > 150)
-                {
-                    string_name_ite = item.Value.Replace("\n", "\t").Replace("\r", "\t").Substring(0, 60);
-                }
-                else
-                {
-                    string_name_ite = item.Value.Replace("\n", "\t").Replace("\r", "\t");
-                }
-                list_clipboard.Items.Add(string_name_ite);
-                VirtualClipBoard_Index_ListBox.Add(list_target_item, item.Key);
-                if (free_slot_to_tray == 1) { break; } else { free_slot_to_tray--; }
-                list_target_item++; // Увеличиваем индекс текущего элемента в ListBox
+                var stringNameIte = item.Value.Length > 150 ?
+                    item.Value.Replace("\n", "\t").Replace("\r", "\t").Substring(0, 60) :
+                    item.Value.Replace("\n", "\t").Replace("\r", "\t");
+                
+                list_clipboard.Items.Add(stringNameIte);
+                _virtualClipBoardIndexListBox.Add(listTargetItem, item.Key);
+                
+                if (freeSlotToTray == 1) 
+                    break;
+
+                freeSlotToTray--;
+                listTargetItem++; // Увеличиваем индекс текущего элемента в ListBox
             }
         }
 
         // Выбор элемента в ListBox
-        private void list_clipboard_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListClipboardSelectedIndexChanged(object sender, EventArgs e)
         {
-            Clipboard.SetText(VirtualClipBoard_History[VirtualClipBoard_Index_ListBox[list_clipboard.SelectedIndex]]);
+            if (list_clipboard.SelectedIndex >= 0 )
+                Clipboard.SetText(_virtualClipBoardHistory[_virtualClipBoardIndexListBox[list_clipboard.SelectedIndex]]);
         }
 
         // Перезагрузка элементов для трей
-        private void reload_tray()
+        private void ReloadTray()
         {
-            ContextMenuStrip contextMenu = new ContextMenuStrip();
+            var contextMenu = new ContextMenuStrip();
             ToolStripMenuItem menuItem;
-
-            int free_slot_to_tray = Properties.Settings.Default.size_tray;
-            var list = VirtualClipBoard_History.OrderByDescending(x => x.Key);
+            var freeSlotToTray = Settings.Default.size_tray;
+            var list = _virtualClipBoardHistory.OrderByDescending(x => x.Key);
+            
             foreach (var item in list)
             {
-                menuItem = new ToolStripMenuItem();
-                menuItem.Tag = item.Key;
-                if (item.Value.Length > 60)
+                menuItem = new ToolStripMenuItem
                 {
-                    menuItem.Text = item.Value.Replace("\n", "\t").Replace("\r", "\t").Substring(0, 60);
-                } else {
-                    menuItem.Text = item.Value.Replace("\n", "\t").Replace("\r", "\t");
-                }
-                
-                menuItem.Click += new System.EventHandler(menu_item_click);
+                    Tag = item.Key,
+                    Text =
+                        item.Value.Length > 60
+                            ? item.Value.Replace("\n", "\t").Replace("\r", "\t").Substring(0, 60)
+                            : item.Value.Replace("\n", "\t").Replace("\r", "\t")
+                };
+
+                menuItem.Click += MenuItemClick;
                 contextMenu.Items.Add(menuItem);
-                if (free_slot_to_tray == 1) { break; } else { free_slot_to_tray--; }
+                
+                if (freeSlotToTray == 1)
+                    break;
+                
+                freeSlotToTray--;
             }
 
             // Разделитель
             contextMenu.Items.Add(new ToolStripSeparator());
 
             // Свернуть/Развернуть
-            menuItem = new ToolStripMenuItem();
-            menuItem.Text = "Настройки";
-            menuItem.Click += new System.EventHandler(menu_item_config);
+            menuItem = new ToolStripMenuItem {Text = Resources.TrayMenu_Settings};
+            menuItem.Click += MenuItemConfig;
             contextMenu.Items.Add(menuItem);
 
             // Выход из программы
-            menuItem = new ToolStripMenuItem();
-            menuItem.Text = "Выход";
-            menuItem.Click += new System.EventHandler(exit_Click);
+            menuItem = new ToolStripMenuItem {Text = Resources.TrayMenu_Exit};
+            menuItem.Click += ExitClick;
             contextMenu.Items.Add(menuItem);
 
             _notifyIcon.ContextMenuStrip = contextMenu;
         }
 
         // Вызов окна настроек
-        private void menu_item_config(object sender, EventArgs e)
+        private void MenuItemConfig(object sender, EventArgs e)
         {
             // ShowInTaskbar = true;
             Show();
@@ -131,14 +130,14 @@ namespace VirtualClipBoard
         }
 
         // Событие по клику на элемент контекстного меню в трее
-        private void menu_item_click(object sender, EventArgs e)
+        private void MenuItemClick(object sender, EventArgs e)
         {
             // Console.WriteLine((int)(sender as ToolStripMenuItem).Tag);
-            Clipboard.SetText(VirtualClipBoard_History[(int)(sender as ToolStripMenuItem).Tag]);
+            Clipboard.SetText(_virtualClipBoardHistory[(int)((ToolStripMenuItem)sender).Tag]);
         }
 
         // событие при клике мышкой по значку в трее
-        private void _notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void NotifyIconMouseDoubleClick(object sender, MouseEventArgs e)
         {
             Console.WriteLine(WindowState);
             if (WindowState == FormWindowState.Normal || WindowState == FormWindowState.Maximized)
@@ -156,171 +155,201 @@ namespace VirtualClipBoard
         }
 
         // Установка путей к файлам конфигурации и истории
-        private void load_configs()
+        private void LoadConfigs()
         {
-            VirtualClipBoard_DAT = Application.UserAppDataPath + "\\history.dat";
-            Console.WriteLine("Файл истории: " + VirtualClipBoard_DAT);
-            history_size.Value = Properties.Settings.Default.history_size;
-            Console.WriteLine("Размер истории загружен из настроек: " + Properties.Settings.Default.history_size);
-            size_tray.Value = Properties.Settings.Default.size_tray;
-            Console.WriteLine("Количество элементов в трее загружено из настроек: " + Properties.Settings.Default.size_tray);
-            RegistryKey reg = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\", true);
-            if (reg.GetValue(VirtualClipBoard_Name) != null){
-                autoload.Checked = true;
-                Console.WriteLine("Приложение записано в автозагрузку. (В настройках ставим Checked = true)");
+            groupBox1.Text = Resources.TrayMenu_Settings;
+            cbLanguage.Items.AddRange(new object[]
+            {
+                new CbItem {Text = Resources.Culture_Invariant, Value = ""},
+                new CbItem {Text = Resources.Culture_Russian, Value = "ru-RU"}
+            });
+            if (!String.IsNullOrEmpty(Settings.Default.Culture))
+               cbLanguage.SelectedIndex = 1;
+
+            VirtualClipBoardDat = Application.UserAppDataPath + "\\history.dat";
+            Console.WriteLine(Resources.Config_Files + VirtualClipBoardDat);
+            history_size.Value = Settings.Default.history_size;
+            Console.WriteLine(Resources.Config_LoadedHistorySize + Settings.Default.history_size);
+            size_tray.Value = Settings.Default.size_tray;
+            Console.WriteLine(Resources.Config_LoadedTrayElements + Settings.Default.size_tray);
+            
+            var reg = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\", true);
+            if (reg != null)
+            {
+                if (reg.GetValue(VirtualClipBoardName) != null)
+                {
+                    autoload.Checked = true;
+                    Console.WriteLine(Resources.Config_AutoLoad);
+                }
+                reg.Close();
             }
-            reg.Close();
 
             // Загружаем историю из файла
-            String XMLString = "";
-            XMLString += @"<items>";
-            if (File.Exists(VirtualClipBoard_DAT))
+            var xmlString = "";
+            xmlString += @"<items>";
+            if (File.Exists(VirtualClipBoardDat))
             {
-                StreamReader stream = new StreamReader(VirtualClipBoard_DAT);
+                var stream = new StreamReader(VirtualClipBoardDat);
                 while (stream.Peek() > -1)
                 {
-                    XMLString += stream.ReadLine() + "\n";
+                    xmlString += stream.ReadLine() + "\n";
                 }
                 stream.Close();
-                XMLString += @"</items>";
-                int index_new_history = 2;
-                XDocument doc = XDocument.Parse(XMLString);
-                var items = doc.Element("items").Elements("item");
-                foreach (XElement item in items)
+                xmlString += @"</items>";
+                var indexNewHistory = 2;
+                var doc = XDocument.Parse(xmlString);
+                var element = doc.Element("items");
+                if (element != null)
                 {
-                    VirtualClipBoard_History.Add(index_new_history, item.Value);
-                    index_new_history++; // увеличиваем индекс новому элементу
+                    var items = element.Elements("item");
+                    foreach (var item in items)
+                    {
+                        _virtualClipBoardHistory.Add(indexNewHistory, item.Value);
+                        indexNewHistory++; // увеличиваем индекс новому элементу
+                    }
                 }
             }
             // Чистим историю буфера
-            if (VirtualClipBoard_History.Count() > Properties.Settings.Default.history_size)
+            if (_virtualClipBoardHistory.Count() > Settings.Default.history_size)
             {
-                int clear_items_count = VirtualClipBoard_History.Count() - Properties.Settings.Default.history_size;
-                var list = VirtualClipBoard_History.Keys.ToList();
+                var clearItemsCount = _virtualClipBoardHistory.Count() - Settings.Default.history_size;
+                var list = _virtualClipBoardHistory.Keys.ToList();
                 list.Sort();
                 foreach (var key in list)
                 {
-                    VirtualClipBoard_History.Remove(key);
-                    if (clear_items_count == 1) { break; } else { clear_items_count--; }
+                    _virtualClipBoardHistory.Remove(key);
+                    if (clearItemsCount == 1)
+                        break;
+
+                    clearItemsCount--;
                 }
             }
             // Обновляем файл истории
-            StreamWriter writer = new StreamWriter(VirtualClipBoard_DAT, false, System.Text.Encoding.UTF8);
-            var new_list = VirtualClipBoard_History.Keys.ToList();
-            new_list.Sort();
-            foreach (var key in new_list)
+            var writer = new StreamWriter(VirtualClipBoardDat, false, System.Text.Encoding.UTF8);
+            var newList = _virtualClipBoardHistory.Keys.ToList();
+            newList.Sort();
+            foreach (var key in newList)
             {
-                writer.WriteLine(@"<item>" + VirtualClipBoard_History[key].Replace(@"<", @"&lt;").Replace(@">", @"&gt;") + @"</item>");
+                writer.WriteLine(@"<item>" + _virtualClipBoardHistory[key].Replace(@"<", @"&lt;").Replace(@">", @"&gt;") + @"</item>");
             }
             writer.Close();
             // Если элементов ноль, добавляем из буфера
-            Console.WriteLine(VirtualClipBoard_History.Count());
-            if (VirtualClipBoard_History.Count() == 0)
+            Console.WriteLine(_virtualClipBoardHistory.Count());
+            if (!_virtualClipBoardHistory.Any())
             {
-                VirtualClipBoard_TARGET = Clipboard.GetText();
-                VirtualClipBoard_History.Add(1, VirtualClipBoard_TARGET);
+                VirtualClipBoardTarget = Clipboard.GetText();
+                _virtualClipBoardHistory.Add(1, VirtualClipBoardTarget);
             }
-            VirtualClipBoard_TARGET = VirtualClipBoard_History.Last().Value;
+            VirtualClipBoardTarget = _virtualClipBoardHistory.Last().Value;
         }
 
         // Событие изменения статуса флажка автозагрузки
         // Если флажок - прописываем в реестр на автозагрузку
-        private void autoload_CheckedChanged(object sender, EventArgs e)
+        private void AutoloadCheckedChanged(object sender, EventArgs e)
         {
-            RegistryKey reg = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\", true);
-            if (reg.GetValue(VirtualClipBoard_Name) != null)
+            const string regKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\";
+
+            var reg = Registry.LocalMachine.OpenSubKey(regKey, true);
+            if (reg == null)
+            {
+                Console.WriteLine( Resources.AutoloadRegistryAccess, regKey);
+                return;
+            }
+
+            if (reg.GetValue(VirtualClipBoardName) != null)
             {
                 try
                 {
-                    reg.DeleteValue(VirtualClipBoard_Name);
-                    Console.WriteLine("Программа " + VirtualClipBoard_Name + " удалена из автозагрузки в реестре");
+                    reg.DeleteValue(VirtualClipBoardName);
+                    Console.WriteLine(Resources.Info_AutoloadOff, VirtualClipBoardName);
                 }
                 catch
                 {
-                    Console.WriteLine("Ошибка удаления " + VirtualClipBoard_Name + " из автозагрузки в реестре");
+                    Console.WriteLine(Resources.Info_AutoloadCheckedError, VirtualClipBoardName);
                 }
             }
-            if(autoload.Checked)
+            
+            if (autoload.Checked)
             {
-                reg.SetValue(VirtualClipBoard_Name, Application.ExecutablePath);
-                Console.WriteLine("Программа " + VirtualClipBoard_Name + " записана в автозагрузку через реестр");
+                reg.SetValue(VirtualClipBoardName, Application.ExecutablePath);
+                Console.WriteLine(Resources.Info_AutoloadOn, VirtualClipBoardName);
             }
             reg.Close();
         }
 
-
         // Завершение работы программы по закрытию через кнопку
-        private void exit_Click(object sender, EventArgs e)
+        private void ExitClick(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
         // изменение размера истории
-        private void history_size_ValueChanged(object sender, EventArgs e)
+        private void HistorySizeValueChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.history_size = (int)history_size.Value;
-            Properties.Settings.Default.Save();
-            Console.WriteLine("Размер истории изменен: " + Properties.Settings.Default.history_size);
-            reload_list_clipboard(); // Обновляем ListBox
+            Settings.Default.history_size = (int)history_size.Value;
+            Settings.Default.Save();
+            Console.WriteLine(Resources.Info_HistorySizeChanged, Settings.Default.history_size);
+            ReloadListClipboard(); // Обновляем ListBox
         }
 
         // изменение количества записей БО в трее
-        private void size_tray_ValueChanged(object sender, EventArgs e)
+        private void SizeTrayValueChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.size_tray = (int)size_tray.Value;
-            Properties.Settings.Default.Save();
-            Console.WriteLine("Количество элементов в трее изменено: " + Properties.Settings.Default.size_tray);
-            reload_tray(); // Обновляем Трей
+            Settings.Default.size_tray = (int)size_tray.Value;
+            Settings.Default.Save();
+            Console.WriteLine(Resources.Info_TraySizeChanged, Settings.Default.size_tray);
+            ReloadTray(); // Обновляем Трей
         }
 
         // Реагируем на обновление буфераобмена
         private void ClipboardChanged()
         {
-            if (Clipboard.ContainsText() && Clipboard.GetText().Length > 0 && VirtualClipBoard_TARGET != Clipboard.GetText())
+            if (!Clipboard.ContainsText() || Clipboard.GetText().Length <= 0 || VirtualClipBoardTarget == Clipboard.GetText())
+                return;
+
+            VirtualClipBoardTarget = Clipboard.GetText();
+
+            // Записываем новый элемент в словарь
+            _virtualClipBoardHistory.Add((_virtualClipBoardHistory.Last().Key + 1), VirtualClipBoardTarget);
+
+            ReloadTray(); // Обноавляемменю в трее
+            ReloadListClipboard(); // Обновляем ListBox
+
+            // Отчистка словаря от лишних элементов
+            if (_virtualClipBoardHistory.Count() > Settings.Default.history_size)
             {
-                VirtualClipBoard_TARGET = Clipboard.GetText();
-
-                // Записываем новый элемент в словарь
-                VirtualClipBoard_History.Add((VirtualClipBoard_History.Last().Key + 1), VirtualClipBoard_TARGET);
-
-                reload_tray(); // Обноавляемменю в трее
-                reload_list_clipboard(); // Обновляем ListBox
-
-                // Отчистка словаря от лишних элементов
-                if (VirtualClipBoard_History.Count() > Properties.Settings.Default.history_size)
+                var clearItemsCount = _virtualClipBoardHistory.Count() - Settings.Default.history_size;
+                var list = _virtualClipBoardHistory.Keys.ToList();
+                list.Sort();
+                foreach (var key in list)
                 {
-                    int clear_items_count = VirtualClipBoard_History.Count() - Properties.Settings.Default.history_size;
-                    var list = VirtualClipBoard_History.Keys.ToList();
-                    list.Sort();
-                    foreach (var key in list)
-                    {
-                        VirtualClipBoard_History.Remove(key);
-                        if (clear_items_count == 1) { break; } else { clear_items_count--; }
-                    }
+                    _virtualClipBoardHistory.Remove(key);
+                    if (clearItemsCount == 1) break;
+                    clearItemsCount--;
                 }
-
-                // Записываем новый элемент в файл истории
-                StreamWriter writer = new StreamWriter(VirtualClipBoard_DAT, true, System.Text.Encoding.UTF8);
-                writer.WriteLine(@"<item>" + VirtualClipBoard_TARGET.Replace(@"<", @"&lt;").Replace(@">", @"&gt;") + @"</item>");
-                writer.Close();
-                Console.WriteLine("В историю добавлен новый элемент: " + VirtualClipBoard_TARGET);
             }
+
+            // Записываем новый элемент в файл истории
+            var writer = new StreamWriter(VirtualClipBoardDat, true, Encoding.UTF8);
+            writer.WriteLine(@"<item>" + VirtualClipBoardTarget.Replace(@"<", @"&lt;").Replace(@">", @"&gt;") + @"</item>");
+            writer.Close();
+            Console.WriteLine(Resources.Info_HistoryAdded, VirtualClipBoardTarget);
         }
 
         // Затираем всю историю
-        private void clear_Click(object sender, EventArgs e)
+        private void ClearClick(object sender, EventArgs e)
         {
-            StreamWriter writer = new StreamWriter(VirtualClipBoard_DAT, false, System.Text.Encoding.Default);
+            var writer = new StreamWriter(VirtualClipBoardDat, false, Encoding.Default);
             writer.Write("");
             writer.Close();
 
-            VirtualClipBoard_History = new Dictionary<int, string>();
+            _virtualClipBoardHistory = new Dictionary<int, string>();
 
-            VirtualClipBoard_TARGET = Clipboard.GetText();
-            VirtualClipBoard_History.Add(1, VirtualClipBoard_TARGET);
+            VirtualClipBoardTarget = Clipboard.GetText();
+            _virtualClipBoardHistory.Add(1, VirtualClipBoardTarget);
 
-            reload_tray(); // Обноавляемменю в трее
-            reload_list_clipboard(); // Обновляем ListBox
+            ReloadTray(); // Обноавляемменю в трее
+            ReloadListClipboard(); // Обновляем ListBox
         }
 
         // Сворачивать в трей вместо закрытия программы
@@ -333,7 +362,7 @@ namespace VirtualClipBoard
         }
 
         // дескриптор окна
-        private IntPtr nextClipboardViewer;
+        private IntPtr _nextClipboardViewer;
 
         // Константы
         public const int WM_DRAWCLIPBOARD = 0x308;
@@ -346,31 +375,44 @@ namespace VirtualClipBoard
             switch (m.Msg)
             {
                 case WM_DRAWCLIPBOARD:
-                    {
-                        ClipboardChanged();
-                        //Console.WriteLine("WM_DRAWCLIPBOARD ClipboardChanged();");
-                        SendMessage(nextClipboardViewer, WM_DRAWCLIPBOARD, m.WParam, m.LParam);
-                        break;
-                    }
+                    ClipboardChanged();
+                    //Console.WriteLine("WM_DRAWCLIPBOARD ClipboardChanged();");
+                    SendMessage(_nextClipboardViewer, WM_DRAWCLIPBOARD, m.WParam, m.LParam);
+                    break;
                 case WM_CHANGECBCHAIN:
-                    {
-                        if (m.WParam == nextClipboardViewer)
-                        {
-                            nextClipboardViewer = m.LParam;
-                        }
-                        else
-                        {
-                            SendMessage(nextClipboardViewer, WM_CHANGECBCHAIN, m.WParam, m.LParam);
-                        }
-                        m.Result = IntPtr.Zero;
-                        break;
-                    }
+                    if (m.WParam == _nextClipboardViewer)
+                        _nextClipboardViewer = m.LParam;
+                    else
+                        SendMessage(_nextClipboardViewer, WM_CHANGECBCHAIN, m.WParam, m.LParam);
+                    m.Result = IntPtr.Zero;
+                    break;
                 default:
-                    {
-                        base.WndProc(ref m);
-                        break;
-                    }
+                    base.WndProc(ref m);
+                    break;
             }
+        }
+
+        private void cbLanguage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbLanguage.SelectedIndex < 0) return;
+
+            var item = (CbItem)cbLanguage.Items[cbLanguage.SelectedIndex];
+            if (item.Value.Equals(Settings.Default.Culture)) return;
+
+            Settings.Default.Culture = item.Value;
+            Settings.Default.Save();
+            MessageBox.Show(Resources.CultureChanged_Text, Resources.CultureChanged_Caption, MessageBoxButtons.OK);
+        }
+    }
+
+    class CbItem
+    {
+        public string Text { get; set; }
+        public string Value { get; set; }
+
+        public override string ToString()
+        {
+            return Text;
         }
     }
 }
